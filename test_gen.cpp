@@ -11,87 +11,108 @@ char RandChar() {
     return 'a' + RandInt(0, 25);
 }
 
-string RandomString(int len) {
-    string s;
-    s.reserve(len);
 
-    for (int i = 0; i < len; i++)
-        s += RandChar();
+void genInt(int testid) {
 
-    return s;
-}
+    int n;
 
+    if (testid == 1) n = 1000;
+    else if (testid == 2) n = 5000;
+    else if (testid == 3) n = 20000;
+    else if (testid == 4) n = 50000;
+    else n = 100000;
 
-void genIntTest(string filename) {
-    ofstream out(filename);
-
-    int n = 100000;
-    out << n << '\n';
+    cout << n << '\n';
 
     for (int i = 0; i < n; i++) {
-        out << RandInt(INT_MIN, INT_MAX) << '\n';
+        cout << RandInt(INT_MIN, INT_MAX) << '\n';
     }
 }
 
-void genStrLenLexi(string filename) {
-    ofstream out(filename);
 
-    int n = 10000;
-    out << n << '\n';
+void genStrLexi(int testid) {
+
+    int n;
+
+    if (testid == 1) n = 1000;
+    else if (testid == 2) n = 5000;
+    else if (testid == 3) n = 20000;
+    else if (testid == 4) n = 50000;
+    else n = 100000;
+
+    cout << n << '\n';
 
     for (int i = 0; i < n; i++) {
 
-        int len = RandInt(80, 100);
+        int len = RandInt(80, 120);
+
+        char c = RandChar();
+
+        string s(len, c);
+
+        s[len - 1] = RandChar();
+
+        cout << s << '\n';
+    }
+}
+
+void genStrLenLexi(int testid) {
+
+    int n;
+
+    if (testid == 1) n = 1000;
+    else if (testid == 2) n = 5000;
+    else if (testid == 3) n = 20000;
+    else if (testid == 4) n = 50000;
+    else n = 100000;
+
+    cout << n << '\n';
+
+    for (int i = 0; i < n; i++) {
+
+        int len = RandInt(90, 100);
 
         string s(len, 'a');
 
         int changes = RandInt(1, 3);
 
         for (int j = 0; j < changes; j++) {
+
             int pos = RandInt(len - 5, len - 1);
+
             s[pos] = RandChar();
         }
 
-        out << s << '\n';
+        cout << s << '\n';
     }
 }
 
+// ====================== MAIN ======================
 
-void genStrLexi(string filename) {
-    ofstream out(filename);
+int main(int argc, char* argv[]) {
 
-    int n = 100000;
-    out << n << '\n';
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
 
-    for (int i = 0; i < n; i++) {
-
-        int len = RandInt(90, 110);
-
-        char base = RandChar();
-
-        string s(len, base);
-
-        s[len - 1] = RandChar();
-
-        out << s << '\n';
+    if (argc != 3) {
+        return 0;
     }
-}
 
-int main() {
+    string type = argv[1];
+    int testid = stoi(argv[2]);
 
-    system("mkdir int");
-    system("mkdir strlenlexi");
-    system("mkdir strlexi");
+    if (testid < 1 || testid > 5) {
+        return 0;
+    }
 
-    for (int i = 1; i <= 5; i++) {
-
-        string id = (i < 10 ? "00" : "0") + to_string(i);
-
-        genIntTest("int/test" + id + ".in");
-
-        genStrLenLexi("strlenlexi/test" + id + ".in");
-
-        genStrLexi("strlexi/test" + id + ".in");
+    if (type == "int") {
+        genInt(testid);
+    }
+    else if (type == "strlexi") {
+        genStrLexi(testid);
+    }
+    else if (type == "strlenlexi") {
+        genStrLenLexi(testid);
     }
 
     return 0;
