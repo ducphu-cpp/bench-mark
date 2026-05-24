@@ -87,7 +87,6 @@ void genStrLenLexi(int testid) {
     }
 }
 
-// ====================== MAIN ======================
 
 int main(int argc, char* argv[]) {
 
