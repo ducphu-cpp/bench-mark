@@ -1,4 +1,4 @@
-# BÁO CÁO ĐỒ ÁN: LENGTH-AWARE LEXICOGRAPHIC STRING SORT BENCHMARK
+# BÁO CÁO ĐỒ ÁN: SORT BENCHMARK
 
 ## 1. Thông tin sinh viên
 * **Tên môn học:** Cấu trúc dữ liệu và Giải thuật
