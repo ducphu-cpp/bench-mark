@@ -1,81 +1,415 @@
-# BÁO CÁO PHÂN TÍCH HIỆU NĂNG THUẬT TOÁN SẮP XẾP HỆ THỐNG
+# BÁO CÁO ĐỒ ÁN SORT BENCHMARK
 
-## 1. THÔNG TIN SINH VIÊN & NHÓM THỰC HIỆN
-* **Tên môn học:** Cấu trúc dữ liệu và Giải thuật
-* **Thời gian học:** Học kỳ 2 - Năm học 2025-2026
-* **Đề tài đồ án:** Đánh giá hiệu năng và Tối ưu hóa tiệm cận thuật toán sắp xếp (Integer & String Sort)
+## Thông tin 
 
-### Danh sách thành viên nhóm:
-1. **Họ và tên:** [Tên thành viên 1] — **MSSV:** [MSSV thành viên 1]
-2. **Họ và tên:** [Tên thành viên 2] — **MSSV:** [MSSV thành viên 2]
-3. **Họ và tên:** [Tên thành viên 3] — **MSSV:** [MSSV thành viên 3]
-
----
-
-## 2. THUẬT TOÁN CÀI ĐẶT Ở LẦN 1: CƠ SỞ PHÂN LOẠI TUYẾN TÍNH
-
-Ở lần chạy đầu tiên, mục tiêu của nhóm là thay thế các thuật toán so sánh thông thường có độ phức tạp $O(N \log N)$ bằng các họ thuật toán phân phối (Distribution-based) nhằm đạt được độ phức tạp thời gian tiệm cận mức tuyến tính $O(N)$ dựa trên tính chất miền dữ liệu.
-
-### 2.1. Chi tiết giải thuật từng bài toán
-* **Bài A (Integer Sort):** Nhóm cài đặt thuật toán lai (Hybrid Sort). Chương trình thực hiện một lượt quét tìm giá trị nhỏ nhất ($mn$) và lớn nhất ($mx$).
-  * Nếu dải giá trị cực nhỏ ($mx - mn + 1 \le 2 \cdot 10^6$), áp dụng **Counting Sort** với độ phức tạp thời gian tối ưu tuyệt đối $O(N)$.
-  * Nếu dải giá trị lớn, chương trình chuyển sang **LSD (Least Significant Digit) Radix Sort**. Thuật toán chia số nguyên 32-bit thành 4 phân đoạn (mỗi phân đoạn 8-bit, cơ số 256). Tiến hành 4 lượt quét (4-pass) từ byte thấp đến byte cao để phân loại phần tử vào các xô (buckets).
-* **Bài B (Lexicographic Sort):** Triển khai thuật toán **MSD (Most Significant Digit) Radix Sort** đệ quy. Thuật toán tiến hành phân loại mảng từ trái qua phải dựa trên ký tự tại vị trí index `pos`. Tại mỗi tầng đệ quy, nếu kích thước mảng con thu hẹp xuống mức $R - L \le 24$, chương trình ngắt đệ quy và chuyển sang dùng **Insertion Sort** cục bộ để sắp xếp các chuỗi con nhằm giảm bớt chi phí chia nhỏ dữ liệu.
-* **Bài C (Length-aware Lexicographic Sort):** Tận dụng giới hạn độ dài chuỗi cố định từ 10 đến 100, nhóm áp dụng **Bucket Sort** chia dữ liệu thành 101 xô tương ứng với từng độ dài. Đối với các chuỗi có cùng độ dài trong một xô, nhóm áp dụng **MSD Radix Sort ngược**, thực hiện quét đếm ký tự phân phối từ vị trí cuối chuỗi (`pos = l - 1`) lùi dần về vị trí đầu chuỗi (index 0).
-
-### 2.2. Phân tích độ phức tạp (Complexity) và Điểm nghẽn ở Lần 1
-* **Độ phức tạp thời gian (Time Complexity):**
-  * *Bài A:* Counting Sort đạt $O(N + \text{range})$. LSD Radix Sort đạt $O(4 \cdot (N + 256)) \approx O(N)$.
-  * *Bài B & C:* MSD Radix Sort đạt $O(L \cdot (N + 26))$ với $L$ là độ dài trung bình của chuỗi ký tự.
-* **Độ phức tạp không gian (Space Complexity):** Cả 3 bài toán đều đòi hỏi mảng phụ `tmp` hoặc `b` có kích thước bằng $O(N)$ để phục vụ việc phân phối lại phần tử, cùng với các mảng đếm tần suất cố định $O(\text{cơ số})$.
-* **Điểm nghẽn thuật toán khiến thời gian chạy chạm mốc 375ms:**
-  1. *Số lượt lặp quá nhiều (Bài A):* Việc thực hiện tới 4 pass (mỗi pass 8-bit) buộc thuật toán phải duyệt qua toàn bộ $10^5$ phần tử và sao chép qua lại giữa hai mảng đúng 4 lần liên tiếp.
-  2. *Sự trùng lặp thao tác kiểm tra ký tự (Bài B):* Khi thuật toán rẽ nhánh sang *Insertion Sort* tại các mảng con, hàm so sánh chuỗi nền tảng `smallerFrom` vẫn tiến hành kiểm tra tuần tự lại từ đầu, làm xuất hiện nhiều phép so sánh thừa đối với các ký tự tiền tố chung đã được Radix Sort phân loại trước đó.
+* Môn học: Cấu trúc dữ liệu và Giải thuật
+* Học kỳ: 2 - Năm học 2025-2026
+* Thời gian: 01/03/2026 - 30/06/2026
+* Giảng viên:
+    * Thầy: Phạm Trọng Nghĩa
+    * Thầy: Huỳnh Lâm Hải Đăng
+    * Thầy: Nguyễn Thanh Tình
+    * Thầy: Nguyễn Ngọc Đức
+* Thông tin sinh viên:
+    * Sinh viên 1:
+        * Họ và tên: Nguyễn Minh Nhật
+        * MSSV: 25120403
+        * Lớp: 25CTT6
+    * Sinh viên 2:
+        * Họ và tên: Nguyễn Hữu Thịnh
+        * MSSV: 25120433
+        * Lớp: 25CTT6
+    * Sinh viên 3:
+        * Họ và tên: Huỳnh Đức Phú
+        * MSSV: 25120415
+        * Lớp: 25CTT6
 
 ---
 
-## 3. PHÂN TÍCH CHIẾN LƯỢC CỦA BỘ SÌNH TEST CASE (FILE TEST_GEN.CPP)
+# Giới thiệu
 
-Bộ sinh mã `test_gen.cpp` được lập trình theo chuẩn C++23, tiếp nhận cấu hình đầu vào thông qua đối số dòng lệnh CLI để sinh ra 5 bộ test case đặc thù cho từng loại dữ liệu (`int`, `strlexi`, `strlenlexi`). Mục tiêu toán học của bộ sinh test là đưa các giải thuật thông thường vào trạng thái giới hạn (Worst-case complexity).
+Mục tiêu của đồ án là nghiên cứu và tối ưu các thuật toán sắp xếp trên ba bài toán khác nhau. Đối với mỗi bài, nhóm thực hiện:
 
-### 3.1. Cơ chế bẻ gãy hiệu năng giải thuật số nguyên (`int`)
-* *Test 3 & 4 (Dữ liệu tăng dần / giảm dần tuần tự):* Nhắm trực tiếp vào cấu trúc phân hoạch của thuật toán **Quick Sort** phổ thông. Nếu Quick Sort chọn phần tử biên (đầu hoặc cuối) làm chốt (pivot), mảng dữ liệu sẽ bị phân tách lệch hoàn toàn (một bên có 0 phần tử, một bên có $N-1$ phần tử). Điều này biến đổi độ phức tạp lý thuyết từ $O(N \log N)$ thành **$O(N^2)$**, gây tràn bộ nhớ ngăn xếp đệ quy hệ thống (Stack Overflow) hoặc vượt quá thời gian chạy (TLE).
-* *Test 5 (Mật độ giá trị trùng lặp cao):* Sinh ra $10^5$ số nhưng chỉ nằm trong khoảng từ 1 đến 10. Bộ test này phá hủy các giải thuật Quick Sort phân hoạch 2 vùng (2-way partition) không có cơ chế thu hẹp phân đoạn bằng nhau, khiến chốt liên tục bị chọn sai lệch vùng.
+1. Xây dựng phiên bản đầu tiên với thuật toán có hiệu năng tốt nhất trong quá trình thử nghiệm.
+2. Thiết kế bộ sinh dữ liệu nhằm tạo các trường hợp bất lợi cho thuật toán mục tiêu.
+3. Tiếp tục tối ưu ở lần nộp thứ hai và so sánh với phiên bản ban đầu.
 
-### 3.2. Cơ chế bẻ gãy hiệu năng giải thuật chuỗi (`strlexi` / `strlenlexi`)
-* *Test 2 (Đồng nhất hoàn toàn độ dài chuỗi):* Triệt tiêu hoàn toàn lợi thế phân loại thô theo xô độ dài ở bước đầu tiên của bài C, ép thuật toán phải dồn toàn bộ tải xử lý vào hàm sắp xếp ký tự phía sau.
-* *Test 3 (Chiến lược ANTI-STRCMP - Tiền tố trùng lặp sâu):* Nhóm thiết kế bộ test sinh ra hàng vạn chuỗi ký tự có **95 ký tự tiền tố đầu tiên giống hệt nhau**, và chỉ bắt đầu xuất hiện ký tự khác biệt ngẫu nhiên ở **5 ký tự cuối cùng**.
-  * **Hệ quả bẻ gãy toán học:** Đối với các giải thuật sắp xếp chuỗi thông thường sử dụng hàm `strcmp` hoặc toán tử so sánh `<` tiêu chuẩn, mỗi phép so sánh giữa hai chuỗi không còn tốn chi phí hằng số $O(1)$ nữa. Hàm `strcmp` bắt buộc phải chạy một vòng lặp tuyến tính duyệt qua toàn bộ 95 ký tự trùng nhau để xác định điểm khác biệt. Chi phí cho một phép so sánh bị đẩy lên mức tối đa là $O(L)$ (với $L$ là độ dài chuỗi). Tổng độ phức tạp toán học của hệ thống bị phóng đại từ $O(N \log N)$ lên thành **$O(L \cdot N \log N)$**, trực tiếp làm sập hiệu năng và gây lỗi TLE trên hệ thống chấm.
+# Cấu trúc Repository
+
+Repository gồm:
+
+```text
+.
+├── README.md
+└── test_gen.cpp
+```
+
+Trong đó:
+
+- `README.md`: báo cáo đồ án, mô tả thuật toán, cách sinh test và các phương pháp tối ưu hóa.
+- `test_gen.cpp`: chương trình sinh dữ liệu benchmark cho ba bài toán Integer Sort, Lexicographic Sort và Length-aware Lexicographic String Sort.
+# BÀI A – INTEGER SORT
+
+## 1. Mô tả bài toán
+
+Bài toán yêu cầu sắp xếp tối đa 100000 số nguyên có dấu 32-bit theo thứ tự tăng dần.
+
+Về mặt chức năng, đây là một bài toán sắp xếp cơ bản. Tuy nhiên trong khuôn khổ benchmark, mục tiêu không chỉ là đưa ra kết quả đúng mà còn phải tối ưu thời gian thực thi trên tập dữ liệu lớn. Do số lượng phần tử có thể đạt tới 10^5 và miền giá trị trải rộng trên toàn bộ không gian số nguyên 32-bit, thuật toán cần xử lý hiệu quả cả về thời gian lẫn bộ nhớ.
+
+---
+
+## 2. Thuật toán tốt nhất ở lần nộp thứ nhất
+
+### Hybrid Sort
+
+Phiên bản đầu tiên sử dụng chiến lược kết hợp:
+
+* Insertion Sort khi `n ≤ 2000`.
+* Counting Sort khi `max - min ≤ 2.000.000`.
+* Radix Sort LSD 8-bit cho các trường hợp còn lại.
+
+Đối với Radix Sort, mỗi pass xử lý 8 bit nên cần tổng cộng 4 pass để xử lý đủ 32 bit. Ở pass cuối, các bucket chứa bit dấu được đưa lên trước nhằm đảm bảo thứ tự đúng của số nguyên có dấu.
+
+### Lý do lựa chọn
+
+Trong quá trình thử nghiệm không có thuật toán nào luôn tốt nhất trên mọi bộ dữ liệu.
+
+* Insertion Sort có chi phí hằng số thấp trên dữ liệu nhỏ.
+* Counting Sort rất hiệu quả khi miền giá trị hẹp.
+* Radix Sort duy trì hiệu năng ổn định trên dữ liệu lớn.
+
+Vì vậy Hybrid Sort tận dụng được ưu điểm của từng thuật toán và cho kết quả tốt nhất ở lần nộp đầu tiên.
+
+### Độ phức tạp
+
+| Thuật toán     | Độ phức tạp  |
+| -------------- | ------------ |
+| Insertion Sort | O(n²)        |
+| Counting Sort  | O(n + range) |
+| Radix Sort     | O(4n)        |
 
 ---
 
-## 4. THUẬT TOÁN TỐI ƯU Ở LẦN 2: THAY ĐỔI CẤU TRÚC VÀ GIẢM ĐỘ PHỨC TẠP TIỆM CẬN
+## 3. Sinh test benchmark
 
-Nhận diện được các điểm nghẽn toán học ở lần 1, nhóm đã thực hiện tái cấu trúc kịch khung giải thuật ở lần 2 nhằm tối ưu hóa số bước lặp và loại bỏ hoàn toàn các phép toán so sánh trùng lặp.
+### Cách sinh dữ liệu
 
-### 4.1. Các phương thức tối ưu hóa thuật toán nâng cao
-* **Bài A (Nâng cấp cấu trúc số Pass của Radix Sort):** Nhóm thay thế hoàn toàn giải thuật 4-pass bằng phiên bản **Radix Sort 2-pass (16-bit cho mỗi pass xử lý)**. Cơ số đếm được mở rộng từ 256 ($2^8$) lên thành 65536 ($2^{16}$).
-  * *Cơ chế hoạt động:* Sử dụng toán tử bitwise mặt nạ `a[i] & 0xFFFF` để đếm và phân loại toàn bộ mảng theo 16-bit thấp ở Pass 1, sau đó dịch bit `(b[i] >> 16) & 0xFFFF` để phân loại theo 16-bit cao ở Pass 2. Để xử lý số nguyên có dấu, nhóm thực hiện phép toán XOR bit dấu `a[i] ^= 0x80000000` ở đầu chương trình để đồng quy toàn bộ dải số về dạng không dấu, giúp thuật toán đếm vị trí chạy chính xác tuyệt đối mà không cần chia thêm nhánh điều kiện.
-* **Bài B (Cơ chế nhảy cóc ký tự tiền tố chung - Prefix Skipping):** Nhóm thay đổi mô hình lưu trữ chuỗi rời rạc thành cấu trúc **Flat-Memory Buffer** (Mảng ký tự phẳng liên tục). Khi thực hiện chia nhỏ đệ quy bằng MSD Radix Sort, biến chỉ số chiều sâu `depth` (vị trí ký tự hiện tại đang xét) được truyền liên tục vào hàm.
-  * *Sự tối ưu về mặt so sánh:* Tại các mảng con có kích thước nhỏ ($\le 16$), hệ thống chuyển sang dùng *Insertion Sort*. Tuy nhiên, thay vì gọi lệnh so sánh từ ký tự đầu tiên, nhóm dịch chuyển con trỏ đọc trực tiếp đến vị trí: `strcmp(buf + ptrs[j] + depth, buf + key + depth)`. Cơ chế này loại bỏ hoàn toàn việc duyệt lại đoạn tiền tố trùng nhau đã biết, giúp hạ chi phí so sánh từ mức tuyến tính $O(L)$ về mức hằng số $O(1)$, vô hiệu hóa hoàn toàn sức tàn phá của bộ test ANTI-STRCMP.
-* **Bài C (Khử đệ quy bằng ngăn xếp tĩnh):** Tại phân đoạn xử lý sắp xếp từ điển phía trong các xô độ dài, nhóm loại bỏ hoàn toàn cấu trúc đệ quy hệ thống. Nhóm tự xây dựng giải thuật **Iterative Quick Sort (Quick Sort vòng lặp)**, tự quản lý vùng biên phân hoạch bằng hai mảng ngăn xếp tĩnh độc lập `stack_left` và `stack_right`. Khi vùng phân hoạch thu hẹp xuống mức $\le 15$ phần tử, giải thuật rẽ nhánh sang *Insertion Sort* để dứt điểm mảng con.
+Chương trình sinh:
 
-### 4.2. So sánh đối chiếu toán học về độ phức tạp giữa hai lần chạy
+* n = 100000.
+* Các số nguyên được sinh ngẫu nhiên trên toàn bộ miền int32.
 
-1. **Giảm thiểu số lượng toán tử cơ bản (Operation Reduction):** Việc chuyển đổi từ 4-pass xuống 2-pass ở bài A giúp giảm chính xác **50% số lần duyệt** qua mảng dữ liệu $10^5$ phần tử và giảm một nửa số thao tác ghi dữ liệu từ mảng tạm ngược về mảng gốc.
-2. **Hạ độ phức tạp trong điều kiện tệ nhất (Worst-case Optimization):** Nhờ cơ chế cộng dồn chỉ số chiều sâu `depth` và so sánh nhảy cóc ở bài B, độ phức tạp thời gian trong kịch bản đối phó với bộ test tiền tố trùng lặp sâu giảm từ mức nguy hiểm $O(L \cdot N \log N)$ xuống mức an toàn là $O(N \cdot L)$, tiết kiệm hàng triệu phép so sánh ký tự trên toàn mạch chạy.
-3. **Triệt tiêu Overhead cấp phát hệ thống:** Khử hoàn toàn cơ chế đệ quy tự động của trình biên dịch ở bài C giúp ngăn chặn việc sinh ra các khung ngăn xếp (Stack Frames) liên tục, đưa độ phức tạp không gian phụ trợ từ mức biến thiên phụ thuộc dữ liệu về mức hằng số cố định $O(1)$ trên ngăn xếp hệ thống.
+Đối với hầu hết các test:
 
-Bảng tổng hợp cải tiến toán học và thời gian thực thi thực tế trên Codeforces:
+```cpp
+[-2147483648 ; 2147483647]
+```
 
-| Tiêu chí phân tích | Phiên bản Lần 1 (Cơ bản) | Phiên bản Lần 2 (Tối ưu nâng cao) |
-| :--- | :--- | :--- |
-| **Số pass lặp (Bài A)** | 4 lượt quét (8-bit / pass) | **2 lượt quét (16-bit / pass)** |
-| **Độ phức tạp so sánh (Bài B)** | Tuyến tính theo chuỗi: $O(L)$ mỗi cặp | **Hằng số tối ưu: $O(1)$ nhờ kỹ thuật nhảy cóc chỉ mục** |
-| **Quản lý ngăn xếp (Bài C)** | Đệ quy hệ thống biến thiên | **Khử đệ quy hoàn toàn bằng ngăn xếp tĩnh cố định** |
-| **Chi phí I/O hệ thống** | Đọc ghi phân đoạn rời rạc | **Gom cụm tuyến tính qua mảng phẳng Fread/Fwrite** |
-| **Thời gian chạy lớn nhất** | **375 ms** | **171 ms (Giảm hơn 54% thời gian xử lý)** |
+Riêng test số 3:
+
+```cpp
+[-500000000 ; 2147483647]
+```
+
+### Thuật toán mục tiêu
+
+* Counting Sort.
+* Bucket Sort.
+* Các thuật toán phụ thuộc mạnh vào miền giá trị.
+
+### Lý do lựa chọn
+
+Miền giá trị quá rộng làm mất lợi thế của Counting Sort và Bucket Sort. Bộ test buộc chương trình phải sử dụng Radix Sort hoặc các thuật toán tổng quát khác.
+
+Đây là dạng dữ liệu phù hợp để đánh giá khả năng xử lý dữ liệu lớn và tối ưu truy cập bộ nhớ.
 
 ---
-## 5. KẾT LUẬN
-Kết quả thực nghiệm đã chứng minh: Đối với các bài toán xử lý chuỗi và số nguyên hiệu năng cao, việc thiết kế một thuật toán có độ phức tạp lý thuyết tốt là chưa đủ. Để tối ưu hóa thời gian chạy vượt trội, giải thuật cần có khả năng tự co giãn cấu trúc theo miền dữ liệu thực tế, triệt tiêu tối đa các phép toán so sánh trùng lặp thông qua toán tử bitwise và tổ chức lưu trữ dữ liệu dạng phẳng liên tục.
+
+## 4. Tối ưu ở lần nộp thứ hai
+
+### Radix Sort 16-bit
+
+| Thành phần  | Lần 1          | Lần 2          |
+| ----------- | -------------- | -------------- |
+| Base        | 256            | 65536          |
+| Số pass     | 4              | 2              |
+| Xử lý số âm | Bucket reorder | XOR 0x80000000 |
+
+### Ý tưởng tối ưu
+
+Phiên bản thứ hai tăng số bit xử lý trong mỗi pass từ 8 lên 16.
+
+Nhờ đó:
+
+* Giảm số lần quét dữ liệu từ 4 xuống còn 2.
+* Giảm truy cập bộ nhớ.
+* Tăng hiệu quả cache.
+
+Ngoài ra phép XOR với `0x80000000` giúp chuyển đổi thứ tự signed integer thành unsigned integer và loại bỏ bước xử lý đặc biệt ở pass cuối.
+
+### Kết quả
+
+Thời gian thực thi giảm đáng kể trên bộ dữ liệu lớn nhờ giảm số pass và lượng thao tác bộ nhớ.
+
+### Độ phức tạp
+
+| Thuật toán | Độ phức tạp |
+|------------|------------|
+| Radix Sort 16-bit (2 pass) | O(n) |
+| Bộ nhớ phụ | O(65536) |
+
+---
+
+# BÀI B – LEXICOGRAPHIC SORT
+
+## 1. Mô tả bài toán
+
+Cho tối đa 100000 chuỗi chỉ gồm các ký tự thường từ 'a' đến 'z', mỗi chuỗi có độ dài từ 10 đến 100 ký tự. Yêu cầu sắp xếp các chuỗi theo thứ tự từ điển tăng dần.
+
+Đây là bài toán trên dữ liệu chuỗi. Khác với bài toán sắp xếp số nguyên, chi phí xử lý không chỉ phụ thuộc vào số lượng phần tử mà còn phụ thuộc vào độ dài của từng chuỗi. Mỗi phép so sánh giữa hai chuỗi có thể phải duyệt qua nhiều ký tự trước khi xác định được thứ tự tương đối của chúng.
+
+Với số lượng dữ liệu lớn và chiều dài chuỗi lên tới 100 ký tự, việc giảm số lần so sánh, hạn chế sao chép dữ liệu và khai thác cấu trúc ký tự của chuỗi là những yếu tố quyết định hiệu năng. Vì vậy bài toán này tập trung đánh giá khả năng tối ưu thuật toán sắp xếp chuỗi trên các bộ dữ liệu có kích thước lớn và mức độ tương đồng cao.
+
+---
+
+## 2. Thuật toán tốt nhất ở lần nộp thứ nhất
+
+### Insertion Sort + MSD String Radix Sort
+
+Thuật toán sử dụng MSD Radix Sort trên chuỗi.
+
+Dữ liệu được lưu bằng:
+
+* Mảng ký tự tĩnh chứa toàn bộ chuỗi.
+* Mảng con trỏ dùng để sắp xếp.
+* Mảng tạm dùng trong quá trình phân bucket.
+
+Việc sắp xếp được thực hiện trên con trỏ thay vì sao chép nội dung chuỗi.
+
+### Các tối ưu hóa
+
+#### Insertion Sort cho bucket nhỏ
+
+Khi số phần tử trong bucket ≤ 32, thuật toán chuyển sang Insertion Sort để giảm chi phí đệ quy.
+
+#### Early Stop
+
+Nếu toàn bộ chuỗi trong một đoạn có cùng ký tự tại vị trí đang xét thì thuật toán bỏ qua bước phân bucket và tiếp tục xử lý ký tự kế tiếp.
+
+#### Bucket 256 phần tử
+
+Sử dụng trực tiếp bảng mã ASCII 256 ký tự giúp giảm chi phí ánh xạ ký tự.
+
+### Lý do lựa chọn
+
+MSD Radix Sort khai thác trực tiếp cấu trúc ký tự của chuỗi thay vì dựa trên phép so sánh toàn phần. Thuật toán đặc biệt hiệu quả khi nhiều chuỗi có tiền tố giống nhau.
+
+### Độ phức tạp
+
+| Thuật toán | Độ phức tạp |
+|------------|------------|
+| MSD Radix Sort | O(n × L) |
+| Insertion Sort (bucket nhỏ) | O(k²) |
+| Bộ nhớ phụ | O(n) |
+
+với:
+
+* n: số chuỗi.
+* L: độ dài trung bình.
+
+---
+
+## 3. Sinh test benchmark
+
+### Cách sinh dữ liệu
+
+Chương trình sinh:
+
+* n = 10000.
+* Mỗi chuỗi dài đúng 100 ký tự.
+* 98 ký tự đầu luôn là `'a'`.
+* Hai ký tự cuối được sinh ngẫu nhiên.
+
+Ví dụ:
+
+```text
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabx
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacy
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaazz
+```
+
+### Thuật toán mục tiêu
+
+* MSD Radix Sort.
+* Quick Sort.
+* Merge Sort.
+
+### Lý do lựa chọn
+
+Các chuỗi có xâu tiền tố chung rất dài.
+
+Đối với thuật toán dựa trên so sánh, mỗi phép so sánh phải duyệt gần hết chuỗi.
+
+Đối với MSD Radix Sort, thuật toán phải đi sâu gần hết độ dài chuỗi trước khi dữ liệu bắt đầu phân nhánh thành các bucket khác nhau.
+
+Bộ test này giúp đánh giá khả năng xử lý dữ liệu có độ tương đồng rất cao.
+
+---
+
+## 4. Tối ưu ở lần nộp thứ hai
+
+### Zero-Copy MSD Radix Sort
+
+Các thay đổi chính:
+
+* Đọc toàn bộ dữ liệu bằng `fread`.
+* Buffer dữ liệu 100MB.
+* Chỉ lưu con trỏ tới chuỗi.
+* Không tạo bản sao dữ liệu.
+* Xuất dữ liệu bằng `fputs`.
+
+### Ý tưởng tối ưu
+
+Mục tiêu là giảm chi phí I/O và giảm số lần cấp phát bộ nhớ.
+
+Việc chỉ thao tác trên con trỏ giúp loại bỏ phần lớn chi phí sao chép chuỗi.
+
+### Kết quả
+
+Thuật toán giữ nguyên bản chất MSD Radix Sort nhưng đạt hiệu năng tốt hơn nhờ giảm cache miss và giảm thao tác bộ nhớ.
+
+### Độ phức tạp
+
+| Thuật toán | Độ phức tạp |
+|------------|------------|
+| MSD Radix Sort | O(n × L) |
+| Bộ nhớ phụ | O(n) |
+
+---
+
+# BÀI C – LENGTH-AWARE LEXICOGRAPHIC STRING SORT
+
+## 1. Mô tả bài toán
+
+Cho tập hợp tối đa 10000 chuỗi ký tự thường. Thứ tự sắp xếp được xác định bởi hai tiêu chí: chuỗi ngắn hơn đứng trước, và nếu hai chuỗi có cùng độ dài thì sắp xếp theo thứ tự từ điển tăng dần.
+
+Đây là bài toán benchmark kết hợp giữa phân loại theo độ dài và sắp xếp chuỗi. So với bài toán sắp xếp từ điển thông thường, thuật toán phải xử lý đồng thời hai khóa sắp xếp khác nhau, trong đó độ dài là tiêu chí ưu tiên cao nhất.
+
+Vấn đề của bài toán nằm ở việc tận dụng đặc điểm dữ liệu để giảm số phép so sánh và giảm lượng công việc cần thực hiện trong từng nhóm chuỗi. Một lời giải hiệu quả cần khai thác tốt tính chất phân bố độ dài của dữ liệu, đồng thời tối ưu quá trình sắp xếp bên trong mỗi nhóm nhằm đạt thời gian thực thi thấp nhất trên các bộ dữ liệu benchmark.
+
+---
+
+## 2. Thuật toán tốt nhất ở lần nộp thứ nhất
+
+### Bucket + LSD Radix Sort
+
+Thuật toán gồm hai bước:
+
+1. Chia dữ liệu thành 91 bucket theo độ dài từ 10 đến 100.
+2. Thực hiện LSD Radix Sort trên từng bucket.
+
+Dữ liệu được đọc và ghi bằng `fread/fwrite` nhằm giảm chi phí I/O.
+
+### Lý do lựa chọn
+
+Do tiêu chí độ dài được ưu tiên trước nên việc bucket theo độ dài giúp loại bỏ hoàn toàn bước so sánh độ dài trong quá trình sắp xếp.
+
+Sau đó LSD Radix Sort hoạt động hiệu quả trên các chuỗi có cùng độ dài.
+
+### Độ phức tạp
+
+| Thuật toán | Độ phức tạp |
+|------------|------------|
+| Bucket theo độ dài | O(n) |
+| LSD Radix Sort | O(n × L) |
+| Bộ nhớ phụ | O(n) |
+
+Trong đó:
+
+- n là số chuỗi.
+- L là độ dài chuỗi.
+
+---
+
+## 3. Sinh test benchmark
+
+### Cách sinh dữ liệu
+
+Chương trình sinh:
+
+* n = 100000.
+* Mỗi chuỗi dài đúng 100 ký tự.
+
+Mỗi chuỗi chỉ gồm một loại ký tự:
+
+```text
+aaaaaaaaaaaaaaaaaaaa...
+bbbbbbbbbbbbbbbbbbbb...
+cccccccccccccccccccc...
+```
+
+Ký tự được chọn ngẫu nhiên từ `'a'` đến `'z'`.
+
+### Thuật toán mục tiêu
+
+* LSD Radix Sort.
+* Các thuật toán xử lý chuỗi theo từng ký tự.
+
+### Lý do lựa chọn
+
+Toàn bộ dữ liệu có cùng độ dài nên tất cả chuỗi rơi vào cùng một bucket rất lớn.
+
+Bộ test giúp đánh giá hiệu năng thực tế của bước sắp xếp bên trong bucket và khả năng xử lý khối lượng lớn dữ liệu chuỗi.
+
+---
+
+## 4. Tối ưu ở lần nộp thứ hai
+
+### Bucket + Randomized Quick Sort
+
+Các thay đổi:
+
+* Giữ nguyên bucket theo độ dài.
+* Thay LSD Radix Sort bằng Quick Sort chọn pivot ngẫu nhiên.
+* Sử dụng stack thủ công thay cho đệ quy.
+* Chuyển sang Insertion Sort khi đoạn ≤ 15 phần tử.
+
+### Ý tưởng tối ưu
+
+Giảm overhead đệ quy và cải thiện hiệu năng trên các bucket nhỏ.
+
+Quick Sort ngẫu nhiên cũng giúp hạn chế nguy cơ rơi vào trường hợp xấu.
+
+### Kết quả
+
+Phiên bản thứ hai cho thời gian thực thi tốt hơn trên bộ dữ liệu benchmark nhờ giảm chi phí phụ trợ và tận dụng tốt đặc điểm dữ liệu.
+
+### Độ phức tạp
+
+| Thuật toán | Độ phức tạp |
+|------------|------------|
+| Bucket theo độ dài | O(n) |
+| Randomized Quick Sort | O(n log n) (trung bình) |
+| Insertion Sort | O(k²) |
+| Bộ nhớ phụ | O(log n) |
+
+Trong đó:
+
+- n là số phần tử trong một bucket.
+- k là kích thước đoạn nhỏ được xử lý bằng Insertion Sort.
+
+---
+
+# KẾT LUẬN
+
+Lần nộp thứ nhất tập trung lựa chọn thuật toán phù hợp cho từng dạng dữ liệu.
+
+Lần nộp thứ hai tập trung vào tối ưu hóa cài đặt:
+
+* Giảm số pass của Radix Sort.
+* Giảm truy cập bộ nhớ.
+* Tăng hiệu quả cache.
+* Giảm sao chép dữ liệu.
+* Tối ưu nhập xuất.
+
+Các bộ test được thiết kế nhằm tạo ra trường hợp bất lợi cho thuật toán mục tiêu, từ đó đánh giá rõ sự khác biệt về hiệu năng giữa các phương pháp cài đặt khác nhau.
