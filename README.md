@@ -17,7 +17,7 @@
         * Lớp: 25CTT6
     * Sinh viên 2:
         * Họ và tên: Nguyễn Hữu Thịnh
-        * MSSV: 25120433
+        * MSSV: 25120443
         * Lớp: 25CTT6
     * Sinh viên 3:
         * Họ và tên: Huỳnh Đức Phú
