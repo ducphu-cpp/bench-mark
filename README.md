@@ -6,10 +6,10 @@
 * Học kỳ: 2 - Năm học 2025-2026
 * Thời gian: 01/03/2026 - 30/06/2026
 * Giảng viên:
-    * Thầy: Phạm Trọng Nghĩa
-    * Thầy: Huỳnh Lâm Hải Đăng
-    * Thầy: Nguyễn Thanh Tình
-    * Thầy: Nguyễn Ngọc Đức
+    * Thầy Phạm Trọng Nghĩa
+    * Thầy Huỳnh Lâm Hải Đăng
+    * Thầy Nguyễn Thanh Tình
+    * Thầy Nguyễn Ngọc Đức
 * Thông tin sinh viên:
     * Sinh viên 1:
         * Họ và tên: Nguyễn Minh Nhật
