@@ -374,7 +374,7 @@ Các thay đổi:
 
 ### Ý tưởng tối ưu
 
-Giảm overhead đệ quy và cải thiện hiệu năng trên các bucket nhỏ.
+Giảm chi phí đệ quy và cải thiện hiệu năng trên các bucket nhỏ.
 
 Quick Sort ngẫu nhiên cũng giúp hạn chế nguy cơ rơi vào trường hợp xấu.
 
@@ -406,7 +406,7 @@ Lần nộp thứ hai tập trung vào tối ưu hóa cài đặt:
 
 * Giảm số pass của Radix Sort.
 * Giảm truy cập bộ nhớ.
-* Tăng hiệu quả cache.
+* tối ưu hóa bộ nhớ đệm.
 * Giảm sao chép dữ liệu.
 * Tối ưu nhập xuất.
 
