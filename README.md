@@ -357,7 +357,7 @@ Ký tự được chọn ngẫu nhiên từ `'a'` đến `'z'`.
 
 ### Lý do lựa chọn
 
-Toàn bộ dữ liệu có cùng độ dài điều đó làm xử lí chuỗi phức tạp từ đó làm tăng thời gian thực thi chườn trình.
+Toàn bộ dữ liệu có cùng độ dài điều đó làm xử lí chuỗi phức tạp từ đó làm tăng thời gian thực thi chương trình.
 
 Bộ test giúp đánh giá khả năng xử lý khối lượng lớn dữ liệu chuỗi.
 
