@@ -119,9 +119,7 @@ Riêng test số 3:
 
 ### Lý do lựa chọn
 
-Miền giá trị quá rộng làm mất lợi thế của Counting Sort và Bucket Sort. Bộ test buộc chương trình phải sử dụng Radix Sort hoặc các thuật toán tổng quát khác.
-
-Đây là dạng dữ liệu phù hợp để đánh giá khả năng xử lý dữ liệu lớn và tối ưu truy cập bộ nhớ.
+Quan sát thấy đa số chương trình dùng Radix Sort nên bộ test luôn sinh ra n = 1e5 và tất cả giá trị đều lớn để làm chậm thời gian thực thi chương trình.
 
 ---
 
