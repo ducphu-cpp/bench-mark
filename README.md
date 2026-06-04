@@ -357,9 +357,9 @@ Ký tự được chọn ngẫu nhiên từ `'a'` đến `'z'`.
 
 ### Lý do lựa chọn
 
-Toàn bộ dữ liệu có cùng độ dài nên tất cả chuỗi rơi vào cùng một bucket rất lớn.
+Toàn bộ dữ liệu có cùng độ dài điều đó làm xử lí chuỗi phức tạp từ đó làm tăng thời gian thực thi chườn trình.
 
-Bộ test giúp đánh giá hiệu năng thực tế của bước sắp xếp bên trong bucket và khả năng xử lý khối lượng lớn dữ liệu chuỗi.
+Bộ test giúp đánh giá khả năng xử lý khối lượng lớn dữ liệu chuỗi.
 
 ---
 
